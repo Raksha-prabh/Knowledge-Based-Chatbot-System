@@ -1,0 +1,27 @@
+{
+  "conversations": [],
+  "learned_qa": {
+    "qa_1": {
+      "question": "Hii",
+      "response": "Hi there! What can I do for you?",
+      "keywords": [],
+      "count": 1,
+      "created": "2026-02-22T07:07:28.936009",
+      "last_updated": "2026-02-22T07:07:28.936026"
+    },
+    "qa_2": {
+      "question": "Iam fine",
+      "response": "That's an interesting question! In demo mode, I can provide helpful responses. For more advanced AI features, please configure an OpenAI API key.",
+      "keywords": [
+        "fine"
+      ],
+      "count": 1,
+      "created": "2026-02-22T07:07:36.795313",
+      "last_updated": "2026-02-22T07:07:36.795334"
+    }
+  },
+  "stats": {
+    "total_messages": 4,
+    "total_conversations": 0
+  }
+}
