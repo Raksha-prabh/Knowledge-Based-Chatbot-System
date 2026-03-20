@@ -5,9 +5,9 @@
       "question": "Hii",
       "response": "Hi there! What can I do for you?",
       "keywords": [],
-      "count": 1,
+      "count": 2,
       "created": "2026-02-22T07:07:28.936009",
-      "last_updated": "2026-02-22T07:07:28.936026"
+      "last_updated": "2026-03-19T00:51:47.126976"
     },
     "qa_2": {
       "question": "Iam fine",
@@ -18,10 +18,38 @@
       "count": 1,
       "created": "2026-02-22T07:07:36.795313",
       "last_updated": "2026-02-22T07:07:36.795334"
+    },
+    "qa_3": {
+      "question": "Hi",
+      "response": "Hi there! What can I do for you?",
+      "keywords": [],
+      "count": 2,
+      "created": "2026-03-19T10:25:24.539051",
+      "last_updated": "2026-03-19T10:26:40.930130"
+    },
+    "qa_4": {
+      "question": "What is python?",
+      "response": "Python is a popular programming language known for its simplicity and readability.",
+      "keywords": [
+        "python?"
+      ],
+      "count": 1,
+      "created": "2026-03-19T10:25:42.812583",
+      "last_updated": "2026-03-19T10:25:42.812594"
+    },
+    "qa_5": {
+      "question": "What is my name?",
+      "response": "That's an interesting question! In demo mode, I can provide helpful responses. For more advanced AI features, please configure an OpenAI API key.",
+      "keywords": [
+        "name?"
+      ],
+      "count": 1,
+      "created": "2026-03-19T10:27:07.308460",
+      "last_updated": "2026-03-19T10:27:07.308472"
     }
   },
   "stats": {
-    "total_messages": 4,
+    "total_messages": 14,
     "total_conversations": 0
   }
 }
