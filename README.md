@@ -1,22 +1,20 @@
-# Knowledge-Based-Chatbot-System
-A Python-based chatbot memory system that stores and learns from user-bot conversations using a JSON knowledge base.
+# Ray: Multi-Tool AI Assistant
+A Python-based chatbot framework powered by the Google Gemini API that orchestrates real-time external tools and maintains a persistent local memory system.
 
 ## Features
-- Stores learned questions and responses
-- Detects similar questions using similarity scoring
-- Increases confidence based on repeated interactions
-- Saves data persistently using JSON
-- Tracks statistics of conversations
+- **Dynamic Tool Orchestration:** Automatically triggers external APIs for live data without manual routing.
+- **Real-Time Weather Tracking:** Extracts live temperatures, wind speeds, and regional metrics using the Open-Meteo API.
+- **Pop-Culture Search:** Fetches TV show and movie summaries, genres, and ratings via the TVMaze API.
+- **Global Holiday Calendar:** Checks upcoming bank and national holidays for specific countries using Nager.Date.
+- **Local Memory Cache:** Uses a JSON knowledge base to store conversations, saving API costs by instantly answering repeated questions.
 
 ## Technologies Used
 - Python
-- Flask (optional integration)
-- JSON storage
+- Google Generative AI (Gemini Engine)
+- Flask (Web Framework)
+- JSON Persistence Storage
+- HTML5 / CSS3 (Frontend)
 
 ## Use Case
-This system can be integrated into chatbots to enable basic learning and memory without databases.
+This system serves as a lightweight template for building zero-maintenance, serverless AI assistants capable of gathering live real-time information.
 
-## Future Enhancements
-- NLP-based similarity (TF-IDF / embeddings)
-- Database integration
-- Admin panel for knowledge review
