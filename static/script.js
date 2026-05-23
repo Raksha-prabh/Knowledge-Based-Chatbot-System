@@ -1,86 +1,61 @@
-// Get DOM elements
-const userInput = document.getElementById('userInput');
-const sendBtn = document.getElementById('sendBtn');
-const chatContainer = document.getElementById('chatContainer');
+document.addEventListener("DOMContentLoaded", () => {
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    const chatBox = document.getElementById("chat-box");
 
-// Event listeners
-sendBtn.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-async function sendMessage() {
-    const message = userInput.value.trim();
-    
-    if (!message) return;
-    
-    // Add user message to chat
-    addMessageToChat(message, 'user');
-    userInput.value = '';
-    
-    // Disable send button while waiting
-    sendBtn.disabled = true;
-    
-    // Add loading indicator
-    const loadingMsg = addMessageToChat('Thinking...', 'bot');
-    
-    try {
-        // Send message to backend
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: message })
-        });
-        
-        const data = await response.json();
-        
-        // Remove loading message
-        if (loadingMsg) loadingMsg.remove();
-        
-        if (!response.ok) {
-            throw new Error(data.message || 'Network response was not ok');
-        }
-        
-        // Add bot response to chat
-        const sourceText = data.source ? ` [${data.source.toUpperCase()}]` : '';
-        addMessageToChat(data.message + sourceText, 'bot');
-        
-    } catch (error) {
-        console.error('Error:', error);
-        if (loadingMsg) loadingMsg.remove();
-        addMessageToChat(`Error: ${error.message}`, 'bot');
-    } finally {
-        sendBtn.disabled = false;
-        userInput.focus();
+    // Function to append messages to the chat UI
+    function appendMessage(text, sender) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", `${sender}-message`);
+        messageDiv.textContent = text;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
     }
-}
 
-function addMessageToChat(message, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    messageDiv.innerHTML = `<p>${escapeHtml(message)}</p>`;
-    chatContainer.appendChild(messageDiv);
-    
-    // Scroll to bottom
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-    
-    return messageDiv;
-}
+    // Function to send message to Flask backend
+    async function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
 
-function escapeHtml(text) {
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, m => map[m]);
-}
+        // Display user message instantly
+        appendMessage(message, "user");
+        userInput.value = "";
 
-// Focus input on page load
-window.addEventListener('load', () => {
-    userInput.focus();
+        // Display a temporary loading placeholder
+        const loadingDiv = document.createElement("div");
+        loadingDiv.classList.add("message", "bot-message", "loading");
+        loadingDiv.textContent = "...";
+        chatBox.appendChild(loadingDiv);
+
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            
+            // Remove loading placeholder
+            chatBox.removeChild(loadingDiv);
+
+            if (response.ok) {
+                appendMessage(data.reply, "bot");
+            } else {
+                appendMessage(`Error: ${data.reply}`, "bot");
+            }
+        } catch (error) {
+            chatBox.removeChild(loadingDiv);
+            appendMessage("Failed to connect to the server.", "bot");
+            console.error("Error:", error);
+        }
+    }
+
+    // Event listeners for button click and 'Enter' key press
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
 });

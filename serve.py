@@ -1,21 +1,35 @@
-"""Run the Flask app using Waitress production WSGI server.
-
-Usage:
-    python serve.py
-
-This avoids the Flask development server warning.
+"""
+Production server for the AI chatbot.
+Runs the Flask app using Waitress WSGI server.
 """
 
 import os
+
 try:
     from waitress import serve
-except Exception:
-    raise SystemExit("Please install dependencies: pip install -r requirements.txt")
+except ImportError:
+    raise SystemExit(
+        "❌ Waitress not installed.\n"
+        "Run: pip install -r requirements.txt"
+    )
 
 from main import app
 
-if __name__ == '__main__':
-    host = os.getenv('HOST', '0.0.0.0')
-    port = int(os.getenv('PORT', '5000'))
-    print(f"Serving on http://{host}:{port} using Waitress")
-    serve(app, host=host, port=port)
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", 5000))
+
+if __name__ == "__main__":
+    print("=" * 50)
+    print("🚀 STARTING AI CHATBOT SERVER")
+    print("=" * 50)
+    print(f"🌐 Host: {HOST}")
+    print(f"🔌 Port: {PORT}")
+    print(f"📍 URL: http://127.0.0.1:{PORT}")
+    print("✅ Running with Waitress Production Server")
+    print("=" * 50)
+
+    try:
+        serve(app, host=HOST, port=PORT, threads=4)
+    except Exception as e:
+        print("❌ SERVER ERROR:")
+        print(str(e))

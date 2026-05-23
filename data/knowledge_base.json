@@ -1,55 +1,78 @@
 {
-  "conversations": [],
+  "conversations": [
+    {
+      "user": "Hello who are you",
+      "bot": "I am a large language model, trained by Google.",
+      "timestamp": "2026-05-23T08:54:30.764722"
+    },
+    {
+      "user": "What is the weather like in New York right now?",
+      "bot": "The weather in New York is 17.7°C with a wind speed of 18.6 km/h.",
+      "timestamp": "2026-05-23T08:54:58.692374"
+    },
+    {
+      "user": "How are you",
+      "bot": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
+      "timestamp": "2026-05-23T08:55:06.959624"
+    },
+    {
+      "user": "what is weather in mangalore",
+      "bot": "The current weather in Mangalore is 5.9°C, with wind at 4.4 km/h.",
+      "timestamp": "2026-05-23T08:56:05.155797"
+    },
+    {
+      "user": "How are you",
+      "bot": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
+      "timestamp": "2026-05-23T08:58:47.019022"
+    }
+  ],
   "learned_qa": {
     "qa_1": {
-      "question": "Hii",
-      "response": "Hi there! What can I do for you?",
-      "keywords": [],
-      "count": 2,
-      "created": "2026-02-22T07:07:28.936009",
-      "last_updated": "2026-03-19T00:51:47.126976"
+      "question": "Hello who are you",
+      "response": "I am a large language model, trained by Google.",
+      "keywords": [
+        "hello"
+      ],
+      "count": 1,
+      "created": "2026-05-23T08:54:30.764782",
+      "last_updated": "2026-05-23T08:54:30.764789"
     },
     "qa_2": {
-      "question": "Iam fine",
-      "response": "That's an interesting question! In demo mode, I can provide helpful responses. For more advanced AI features, please configure an OpenAI API key.",
+      "question": "What is the weather like in New York right now?",
+      "response": "The weather in New York is 17.7°C with a wind speed of 18.6 km/h.",
       "keywords": [
-        "fine"
+        "weather",
+        "like",
+        "york",
+        "right",
+        "now?"
       ],
       "count": 1,
-      "created": "2026-02-22T07:07:36.795313",
-      "last_updated": "2026-02-22T07:07:36.795334"
+      "created": "2026-05-23T08:54:58.692459",
+      "last_updated": "2026-05-23T08:54:58.692468"
     },
     "qa_3": {
-      "question": "Hi",
-      "response": "Hi there! What can I do for you?",
+      "question": "How are you",
+      "response": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
       "keywords": [],
       "count": 2,
-      "created": "2026-03-19T10:25:24.539051",
-      "last_updated": "2026-03-19T10:26:40.930130"
+      "created": "2026-05-23T08:55:06.959713",
+      "last_updated": "2026-05-23T08:58:47.019065"
     },
     "qa_4": {
-      "question": "What is python?",
-      "response": "Python is a popular programming language known for its simplicity and readability.",
+      "question": "what is weather in mangalore",
+      "response": "The current weather in Mangalore is 5.9°C, with wind at 4.4 km/h.",
       "keywords": [
-        "python?"
+        "weather",
+        "mangalore"
       ],
       "count": 1,
-      "created": "2026-03-19T10:25:42.812583",
-      "last_updated": "2026-03-19T10:25:42.812594"
-    },
-    "qa_5": {
-      "question": "What is my name?",
-      "response": "That's an interesting question! In demo mode, I can provide helpful responses. For more advanced AI features, please configure an OpenAI API key.",
-      "keywords": [
-        "name?"
-      ],
-      "count": 1,
-      "created": "2026-03-19T10:27:07.308460",
-      "last_updated": "2026-03-19T10:27:07.308472"
+      "created": "2026-05-23T08:56:05.155864",
+      "last_updated": "2026-05-23T08:56:05.155868"
     }
   },
   "stats": {
-    "total_messages": 14,
-    "total_conversations": 0
+    "total_messages": 10,
+    "total_conversations": 5
   }
 }
