@@ -24,6 +24,36 @@
       "user": "How are you",
       "bot": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
       "timestamp": "2026-05-23T08:58:47.019022"
+    },
+    {
+      "user": "then",
+      "bot": "Please tell me what you would like to do then. I can get the current weather for a city if you like.",
+      "timestamp": "2026-05-23T09:15:59.374582"
+    },
+    {
+      "user": "ok",
+      "bot": "Is there anything I can help you with?\n",
+      "timestamp": "2026-05-23T09:16:13.457775"
+    },
+    {
+      "user": "current weather",
+      "bot": "Please tell me the city for which you want the weather.",
+      "timestamp": "2026-05-23T09:20:07.184854"
+    },
+    {
+      "user": "Hubli",
+      "bot": "The current weather in Hubli is 27.5°C with a wind speed of 13.4 km/h.",
+      "timestamp": "2026-05-23T09:20:26.804025"
+    },
+    {
+      "user": "Tell me about the show Wednesday\"",
+      "bot": "\"Wednesday\" is a comedy, mystery, and supernatural show with a rating of 7.9/10. The plot revolves around Wednesday Addams, who investigates a murder spree and navigates new relationships at Nevermore Academy.",
+      "timestamp": "2026-05-23T09:27:23.838184"
+    },
+    {
+      "user": "how are you",
+      "bot": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
+      "timestamp": "2026-05-23T09:36:15.851077"
     }
   ],
   "learned_qa": {
@@ -55,9 +85,9 @@
       "question": "How are you",
       "response": "I'm doing well, thank you! I'm ready to assist you with any questions or tasks you have. How can I help you today?\n",
       "keywords": [],
-      "count": 2,
+      "count": 3,
       "created": "2026-05-23T08:55:06.959713",
-      "last_updated": "2026-05-23T08:58:47.019065"
+      "last_updated": "2026-05-23T09:36:15.851116"
     },
     "qa_4": {
       "question": "what is weather in mangalore",
@@ -69,10 +99,61 @@
       "count": 1,
       "created": "2026-05-23T08:56:05.155864",
       "last_updated": "2026-05-23T08:56:05.155868"
+    },
+    "qa_5": {
+      "question": "then",
+      "response": "Please tell me what you would like to do then. I can get the current weather for a city if you like.",
+      "keywords": [
+        "then"
+      ],
+      "count": 1,
+      "created": "2026-05-23T09:15:59.374653",
+      "last_updated": "2026-05-23T09:15:59.374656"
+    },
+    "qa_6": {
+      "question": "ok",
+      "response": "Is there anything I can help you with?\n",
+      "keywords": [],
+      "count": 1,
+      "created": "2026-05-23T09:16:13.457881",
+      "last_updated": "2026-05-23T09:16:13.457885"
+    },
+    "qa_7": {
+      "question": "current weather",
+      "response": "Please tell me the city for which you want the weather.",
+      "keywords": [
+        "current",
+        "weather"
+      ],
+      "count": 1,
+      "created": "2026-05-23T09:20:07.184966",
+      "last_updated": "2026-05-23T09:20:07.184973"
+    },
+    "qa_8": {
+      "question": "Hubli",
+      "response": "The current weather in Hubli is 27.5°C with a wind speed of 13.4 km/h.",
+      "keywords": [
+        "hubli"
+      ],
+      "count": 1,
+      "created": "2026-05-23T09:20:26.804097",
+      "last_updated": "2026-05-23T09:20:26.804100"
+    },
+    "qa_9": {
+      "question": "Tell me about the show Wednesday\"",
+      "response": "\"Wednesday\" is a comedy, mystery, and supernatural show with a rating of 7.9/10. The plot revolves around Wednesday Addams, who investigates a murder spree and navigates new relationships at Nevermore Academy.",
+      "keywords": [
+        "about",
+        "show",
+        "wednesday\""
+      ],
+      "count": 1,
+      "created": "2026-05-23T09:27:23.838281",
+      "last_updated": "2026-05-23T09:27:23.838284"
     }
   },
   "stats": {
-    "total_messages": 10,
-    "total_conversations": 5
+    "total_messages": 22,
+    "total_conversations": 11
   }
 }
