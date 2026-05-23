@@ -111,12 +111,17 @@ def chat():
             return jsonify({"reply": reply, "source": "local_knowledge"})
 
         # Fire up a session tracking automated tool executions
+        # NEW CRASH-PROOF SERVERLESS CODE BLOCK:
         chat_session = model.start_chat(enable_automatic_function_calling=True)
         response = chat_session.send_message(user_message)
         reply = response.text
 
-        # Save successful conversations locally
-        kb.add_conversation(user_message, reply)
+        try:
+        # Try saving locally, but catch the error if the filesystem is read-only
+          kb.add_conversation(user_message, reply)
+        except Exception:
+         pass  # Silently bypass Vercel's write-block restrictions!
+
         return jsonify({"reply": reply, "source": "gemini-free-plus"})
 
     except Exception as e:
