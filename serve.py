@@ -13,7 +13,7 @@ except ImportError:
         "Run: pip install -r requirements.txt"
     )
 
-from main import app
+from index import app
 
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", 5000))
