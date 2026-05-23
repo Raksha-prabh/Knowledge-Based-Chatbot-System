@@ -2,11 +2,10 @@ import os
 import json
 import requests
 from flask import Flask, jsonify, render_template, request
-from dotenv import load_dotenv
 import google.generativeai as genai
 from knowledge_base import KnowledgeBase
 
-load_dotenv()
+
 app = Flask(__name__)
 kb = KnowledgeBase()
 
@@ -128,5 +127,6 @@ def chat():
         return jsonify({"reply": f"System Error: {str(e)}"}), 500
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# Just leave it completely blank at the bottom, or use this safe fallback block:
+if __name__ == '__main__':
+    app.run()
