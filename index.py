@@ -1,132 +1,318 @@
 import os
-import json
 import requests
 from flask import Flask, jsonify, render_template, request
-import google.generativeai as genai
+from groq import Groq
+from dotenv import load_dotenv
 from knowledge_base import KnowledgeBase
 
+# =========================================================
+# LOAD ENV VARIABLES
+# =========================================================
+
+load_dotenv()
+
+# =========================================================
+# CREATE FLASK APP
+# =========================================================
 
 app = Flask(__name__)
+
+# =========================================================
+# INITIALIZE KNOWLEDGE BASE
+# =========================================================
+
 kb = KnowledgeBase()
 
-# 1. SETUP THE FREE GOOGLE API CLIENT
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise RuntimeError("GEMINI_API_KEY is not set in your .env file!")
+# =========================================================
+# GROQ API SETUP
+# =========================================================
 
-genai.configure(api_key=api_key)
+groq_api_key = os.getenv("GROQ_API_KEY")
 
+if not groq_api_key:
+    raise RuntimeError("GROQ_API_KEY is not set!")
 
-# =====================================================================
-# CHATBOT TOOLBELT (Your Custom Python Backend APIs)
-# =====================================================================
+client = Groq(api_key=groq_api_key)
+
+# =========================================================
+# WEATHER TOOL
+# =========================================================
 
 def get_lat_long(city_name: str):
-    """Internal helper to convert city strings to geolocation coordinates."""
+
     try:
-        url = f"https://geocoding-api.open-meteo.com/v1/search?name={city_name}&count=1&language=en&format=json"
-        res = requests.get(url).json()
-        if "results" in res and len(res["results"]) > 0:
-            loc = res["results"][0]
-            return loc["latitude"], loc["longitude"], loc.get("name", city_name)
+        url = (
+            f"https://geocoding-api.open-meteo.com/v1/search?"
+            f"name={city_name}&count=1&language=en&format=json"
+        )
+
+        response = requests.get(url)
+        data = response.json()
+
+        if "results" in data and len(data["results"]) > 0:
+
+            location = data["results"][0]
+
+            return (
+                location["latitude"],
+                location["longitude"],
+                location.get("name", city_name)
+            )
+
     except Exception:
         pass
+
     return None, None, city_name
 
 
-def get_live_weather(city: str) -> str:
-    """Get the current live real-time weather and temperature data for a specific location or city name."""
+def get_live_weather(city: str):
+
     lat, lon, real_name = get_lat_long(city)
+
     if not lat:
-        return f"Could not find coordinates for location: {city}"
+        return f"Could not find location: {city}"
+
     try:
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
-        data = requests.get(url).json()
+        url = (
+            f"https://api.open-meteo.com/v1/forecast?"
+            f"latitude={lat}&longitude={lon}&current_weather=true"
+        )
+
+        response = requests.get(url)
+        data = response.json()
+
         current = data.get("current_weather", {})
+
         if current:
-            return f"Current weather in {real_name}: {current.get('temperature')}°C, Wind: {current.get('windspeed')} km/h."
-    except Exception as e:
-        return f"Error retrieving weather details: {str(e)}"
-    return "Weather server down."
 
+            temperature = current.get("temperature")
+            windspeed = current.get("windspeed")
 
-def search_tv_show(show_name: str) -> str:
-    """Search for a TV show's profile including summary descriptions, genres, and database live rating score."""
-    try:
-        url = f"http://api.tvmaze.com/singlesearch/shows?q={show_name}"
-        data = requests.get(url).json()
-        if data:
-            summary = data.get("summary", "").replace("<p>", "").replace("</p>", "").replace("<b>", "").replace("</b>", "")
             return (
-                f"Official Title: {data.get('name')} | "
+                f"Current weather in {real_name}: "
+                f"{temperature}°C with wind speed "
+                f"{windspeed} km/h."
+            )
+
+    except Exception as e:
+        return f"Weather API Error: {str(e)}"
+
+    return "Weather information unavailable."
+
+
+# =========================================================
+# TV SHOW TOOL
+# =========================================================
+
+def search_tv_show(show_name: str):
+
+    try:
+        url = f"https://api.tvmaze.com/singlesearch/shows?q={show_name}"
+
+        response = requests.get(url)
+        data = response.json()
+
+        if data:
+
+            summary = (
+                data.get("summary", "")
+                .replace("<p>", "")
+                .replace("</p>", "")
+                .replace("<b>", "")
+                .replace("</b>", "")
+            )
+
+            return (
+                f"Title: {data.get('name')} | "
                 f"Rating: {data.get('rating', {}).get('average', 'N/A')}/10 | "
                 f"Genres: {', '.join(data.get('genres', []))} | "
-                f"Plot Summary: {summary}"
+                f"Summary: {summary}"
             )
+
     except Exception:
         pass
-    return f"Could not find any TV show logs matching '{show_name}'."
+
+    return f"Could not find TV show: {show_name}"
 
 
-def get_public_holidays(country_code: str) -> str:
-    """Get the official national bank/public holidays for a specific country abbreviation code (e.g., US, IN, GB)."""
+# =========================================================
+# HOLIDAY TOOL
+# =========================================================
+
+def get_public_holidays(country_code: str):
+
     try:
-        url = f"https://date.nager.at/api/v3/PublicHolidays/2026/{country_code.upper()}"
-        res = requests.get(url).json()
-        if isinstance(res, list) and len(res) > 0:
-            holidays = [f"{h['date']}: {h['localName']}" for h in res[:5]]
-            return f"Upcoming national holidays for {country_code.upper()}: " + ", ".join(holidays)
+        url = (
+            f"https://date.nager.at/api/v3/PublicHolidays/"
+            f"2026/{country_code.upper()}"
+        )
+
+        response = requests.get(url)
+        data = response.json()
+
+        if isinstance(data, list) and len(data) > 0:
+
+            holidays = [
+                f"{holiday['date']}: {holiday['localName']}"
+                for holiday in data[:5]
+            ]
+
+            return (
+                f"Upcoming holidays in "
+                f"{country_code.upper()}: "
+                + ", ".join(holidays)
+            )
+
     except Exception:
         pass
-    return f"Could not fetch upcoming holiday schedules for country code: {country_code}."
+
+    return f"Could not fetch holidays for {country_code}"
 
 
-# 2. BIND THE REMAINING PYTHON FUNCTIONS DIRECTLY TO THE FREE GEMINI ENGINE
-model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
-    tools=[get_live_weather, search_tv_show, get_public_holidays]
-)
-
+# =========================================================
+# HOME PAGE
+# =========================================================
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
+# =========================================================
+# CHAT API
+# =========================================================
+
 @app.route("/api/chat", methods=["POST"])
 def chat():
+
     data = request.get_json(silent=True) or {}
     user_message = data.get("message", "").strip()
 
     if not user_message:
-        return jsonify({"reply": "Please send a valid message."}), 400
+        return jsonify({
+            "reply": "Please send a valid message."
+        }), 400
 
     try:
-        # Check local knowledge base first to optimize speeds and prevent rate limits
-        learned_match = kb.get_learned_response(user_message)
-        if learned_match:
-            reply = learned_match["response"]
-            kb.add_conversation(user_message, reply)
-            return jsonify({"reply": reply, "source": "local_knowledge"})
 
-        # Fire up a session tracking automated tool executions
-        # NEW CRASH-PROOF SERVERLESS CODE BLOCK:
-        chat_session = model.start_chat(enable_automatic_function_calling=True)
-        response = chat_session.send_message(user_message)
-        reply = response.text
+        # =================================================
+        # LOCAL KNOWLEDGE BASE
+        # =================================================
+
+        learned_match = kb.get_learned_response(user_message)
+
+        if learned_match:
+
+            reply = learned_match["response"]
+
+            try:
+                kb.add_conversation(user_message, reply)
+            except Exception:
+                pass
+
+            return jsonify({
+                "reply": reply,
+                "source": "local_knowledge"
+            })
+
+        # =================================================
+        # WEATHER TOOL
+        # =================================================
+
+        if "weather" in user_message.lower():
+
+            city = (
+                user_message.lower()
+                .replace("weather", "")
+                .replace("in", "")
+                .strip()
+            )
+
+            reply = get_live_weather(city)
+
+            return jsonify({
+                "reply": reply,
+                "source": "weather_tool"
+            })
+
+        # =================================================
+        # TV SHOW TOOL
+        # =================================================
+
+        if (
+            "tv show" in user_message.lower()
+            or "show" in user_message.lower()
+        ):
+
+            show = (
+                user_message.lower()
+                .replace("tv show", "")
+                .replace("show", "")
+                .strip()
+            )
+
+            reply = search_tv_show(show)
+
+            return jsonify({
+                "reply": reply,
+                "source": "tv_show_tool"
+            })
+
+        # =================================================
+        # HOLIDAY TOOL
+        # =================================================
+
+        if "holiday" in user_message.lower():
+
+            country = user_message.split()[-1]
+
+            reply = get_public_holidays(country)
+
+            return jsonify({
+                "reply": reply,
+                "source": "holiday_tool"
+            })
+
+        # =================================================
+        # GROQ AI RESPONSE
+        # =================================================
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful AI assistant."
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ]
+        )
+
+        reply = response.choices[0].message.content
 
         try:
-        # Try saving locally, but catch the error if the filesystem is read-only
-          kb.add_conversation(user_message, reply)
+            kb.add_conversation(user_message, reply)
         except Exception:
-         pass  # Silently bypass Vercel's write-block restrictions!
+            pass
 
-        return jsonify({"reply": reply, "source": "gemini-free-plus"})
+        return jsonify({
+            "reply": reply,
+            "source": "groq-ai"
+        })
 
     except Exception as e:
-        return jsonify({"reply": f"System Error: {str(e)}"}), 500
+
+        return jsonify({
+            "reply": f"System Error: {str(e)}"
+        }), 500
 
 
-# Just leave it completely blank at the bottom, or use this safe fallback block:
-if __name__ == '__main__':
-    app.run()
+# =========================================================
+# RUN FLASK APP
+# =========================================================
+
+if __name__ == "__main__":
+    app.run(debug=True)
