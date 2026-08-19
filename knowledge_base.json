@@ -15,6 +15,10 @@
         {
             "prompt": "thanks",
             "response": "Is there anything I can help you with or would you like to chat?"
+        },
+        {
+            "prompt": "hello",
+            "response": "Hello. How are you today? Is there something I can help you with, or would you like to chat?"
         }
     ]
 }
