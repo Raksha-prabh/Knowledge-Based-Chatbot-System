@@ -1,4 +1,5 @@
 import os
+from urllib import response
 import requests
 from flask import Flask, jsonify, render_template, request
 from groq import Groq
@@ -276,9 +277,8 @@ def chat():
         # =================================================
         # GROQ AI RESPONSE
         # =================================================
-
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-20b",
             messages=[
                 {
                     "role": "system",
@@ -291,7 +291,9 @@ def chat():
             ]
         )
 
+
         reply = response.choices[0].message.content
+
 
         try:
             kb.add_conversation(user_message, reply)
@@ -316,3 +318,4 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
